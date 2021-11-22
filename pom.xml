@@ -12,12 +12,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <properties>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <javadoc.version>3.3.1</javadoc.version>
+        <maven-compile-plugin.version>3.8.1</maven-compile-plugin.version>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <lombok.version>1.18.12</lombok.version>
         <spring-data-redis.version>2.5.4</spring-data-redis.version>
         <reactor-core.version>3.4.10</reactor-core.version>
-        <javadoc.version>3.3.1</javadoc.version>
         <junit.version>4.13.2</junit.version>
         <junit-jupiter.version>5.7.2</junit-jupiter.version>
     </properties>
@@ -27,6 +32,22 @@
         <module>ratelimiter-springboot</module>
     </modules>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compile-plugin.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-javadoc-plugin -->
         <dependency>
@@ -35,6 +56,7 @@
             <version>${javadoc.version}</version>
         </dependency>
     </dependencies>
+
     <reporting>
         <plugins>
 

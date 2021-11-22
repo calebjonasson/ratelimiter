@@ -1,4 +1,4 @@
-package com.calebjonasson.ratelimiter.inmemory;
+package com.calebjonasson.ratelimiter.core.inmemory;
 
 import com.calebjonasson.ratelimiter.core.context.ContextProviderFactory;
 import com.calebjonasson.ratelimiter.core.context.InMemoryContextProvider;

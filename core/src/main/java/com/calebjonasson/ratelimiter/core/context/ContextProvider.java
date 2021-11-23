@@ -22,6 +22,7 @@ public interface ContextProvider {
 	 * @param contextKey The context key that we are loading from the datasource.
 	 * @return An optional {@link RateLimitContext} if the implementation needs to create a context on the fly it should
 	 * do so here.
+	 * @throws RateLimitContextNotFoundException thrown if unable to find or create a context by the desired key.
 	 */
 	public Optional<RateLimitContext> getContext(String contextKey) throws RateLimitContextNotFoundException;
 

@@ -102,22 +102,16 @@ public class InMemoryRateLimiterTest {
 		contextProvider.putContext(DEFAULT_CONTEXT_KEY, RateLimitContext.builder().limit(limit).interval(interval).build());
 		InMemoryRateLimiter limiter = RateLimiterFactory.inMemoryRateLimiter(contextProvider);
 
-		System.out.println("Creating a list of operations.");
 		// Create a list of atomic operations.
 		for(int x = 0; x < atomicOperations; x++) {
 			operations.add(x);
 		}
 
-		System.out.println("Executing the operations.");
 		AtomicInteger successCount = new AtomicInteger();
+
 		// Once we have loaded the operations we will attempt to break the rate limiter.
 		operations.stream().parallel().map(x -> {
-			try {
-				System.out.println("operation[" + x + "] " + limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey));
-				successCount.getAndIncrement();
-			} catch (RateLimitException e) {
-//				System.out.println("error occurred during atomic operation. " + e.getMessage());
-			}
+			successCount.getAndIncrement();
 			return x;
 		}).collect(Collectors.toList());
 

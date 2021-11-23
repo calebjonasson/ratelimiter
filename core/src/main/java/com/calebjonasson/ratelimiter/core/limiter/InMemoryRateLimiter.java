@@ -6,7 +6,7 @@ import com.calebjonasson.ratelimiter.core.model.RateLimitState;
 import com.calebjonasson.ratelimiter.core.state.RateLimitStateFactory;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,7 +26,8 @@ public class InMemoryRateLimiter extends RateLimiter {
 	 * The concrete states that are being held in the rate limiter.
 	 * TODO: Swap this out to a linkedHashMap using an LRU data structure.
 	 */
-	private Map<String, RateLimitState> states = new LinkedHashMap<>(40000, 5, true);
+//	private Map<String, RateLimitState> states = new LinkedHashMap<>(40000, 5, true);
+	private Map<String, RateLimitState> states = new HashMap<>();
 
 	/**
 	 * Create a new In memory ratelimiter

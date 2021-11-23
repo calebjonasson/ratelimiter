@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.calebjonasson</groupId>
+	<artifactId>site</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>Site</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<maven-changes.version>2.12.1</maven-changes.version>
+		<maven-jacoco.version>0.8.7</maven-jacoco.version>
+		<maven-jar.version>3.1.1</maven-jar.version>
+		<maven-javadoc.version>3.3.1</maven-javadoc.version>
+		<maven-site.version>3.9.1</maven-site.version>
+		<maven-surefire.version>3.0.0-M5</maven-surefire.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.calebjonasson.ratelimiter</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+<!--			<scope>compile</scope>-->
+			<classifier>javadoc</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.calebjonasson.ratelimiter</groupId>
+			<artifactId>springboot</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+<!--			<classifier>javadoc</classifier>-->
+<!--			<scope>compile</scope>-->
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>${maven-surefire.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>site</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven-site.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${maven-jacoco.version}</version>
+					<executions>
+						<execution>
+							<id>default-prepare-agent</id>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+
+						<execution>
+							<id>report</id>
+							<phase>site</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-changes-plugin</artifactId>
+					<version>${maven-changes.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jxr-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>3.1.1</version>
+			</plugin>
+<!--			<plugin>-->
+<!--				<artifactId>maven-javadoc-plugin</artifactId>-->
+<!--&lt;!&ndash;				<version>3.3.1</version>&ndash;&gt;-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>javadoc-jar</id>-->
+<!--						<phase>site</phase>-->
+<!--						<goals>-->
+<!--&lt;!&ndash;							<goal>resource-bundle</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>javadoc-no-fork</goal>&ndash;&gt;-->
+<!--							<goal>javadoc</goal>-->
+<!--						</goals>-->
+<!--						<configuration>-->
+<!--							&lt;!&ndash; switch on dependency-driven aggregation &ndash;&gt;-->
+<!--							<includeDependencySources>true</includeDependencySources>-->
+
+<!--							<dependencySourceExcludes>-->
+<!--								&lt;!&ndash; exclude ONLY commons-cli artifacts &ndash;&gt;-->
+<!--&lt;!&ndash;								<dependencySourceExclude>commons-cli:*</dependencySourceExclude>&ndash;&gt;-->
+<!--							</dependencySourceExcludes>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.1</version>
+				<executions>
+					<execution>
+						<id>bundle-sources</id>
+						<phase>package</phase>
+						<goals>
+							<!-- produce source artifact for main project sources -->
+							<goal>jar-no-fork</goal>
+
+							<!-- produce source artifact for project test sources -->
+							<goal>test-jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+<!--			<plugin>-->
+<!--				<artifactId>maven-javadoc-plugin</artifactId>-->
+<!--&lt;!&ndash;				<version>3.3.1</version>&ndash;&gt;-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>javadoc-jar</id>-->
+<!--						<phase>package</phase>-->
+<!--						<goals>-->
+<!--							&lt;!&ndash; produce source artifact for main project sources &ndash;&gt;-->
+<!--							<goal>jar</goal>-->
+<!--&lt;!&ndash;							<goal>javadoc</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>aggregate</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>aggregate-no-fork</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>javadoc-no-fork</goal>&ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>jar</goal>&ndash;&gt;-->
+
+<!--							&lt;!&ndash; produce source artifact for project test sources &ndash;&gt;-->
+<!--&lt;!&ndash;							<goal>test-resource-bundle</goal>&ndash;&gt;-->
+<!--						</goals>-->
+<!--&lt;!&ndash;						<configuration>&ndash;&gt;-->
+<!--&lt;!&ndash;							<detectOfflineLinks>false</detectOfflineLinks>&ndash;&gt;-->
+<!--&lt;!&ndash;							<includeDependencySources>true</includeDependencySources>&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;							<dependencySourceIncludes>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;								&lt;!&ndash; include ONLY dependencies I control &ndash;&gt;&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;								<dependencySourceInclude>com.calebjonasson.ratelimiter:*</dependencySourceInclude>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;							</dependencySourceIncludes>&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;						</configuration>&ndash;&gt;-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>resource-bundles</id>
+						<phase>package</phase>
+						<goals>
+							<!-- produce source artifact for main project sources -->
+							<goal>resource-bundle</goal>
+
+							<!-- produce source artifact for project test sources -->
+							<goal>test-resource-bundle</goal>
+						</goals>
+						<configuration>
+							<detectOfflineLinks>false</detectOfflineLinks>
+							<includeDependencySources>true</includeDependencySources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.0.0</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>modules</report>
+							<report>licenses</report>
+							<report>dependency-info</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<configuration>
+					<aggregate>true</aggregate>
+					<linkXRef>true</linkXRef>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>report</id>
+						<inherited>false</inherited>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>default</id>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<id>report-aggregate</id>
+						<inherited>false</inherited>
+						<reports>
+							<report>report-aggregate</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>default</id>
+						<reports>
+							<report>report-aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>3.1.1</version>
+				<reportSets>
+					<reportSet>
+						<id>aggregate</id>
+						<reports>
+							<report>aggregate</report>
+							<report>test-aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-javadoc-plugin</artifactId>-->
+<!--				<version>${maven-javadoc.version}</version>-->
+<!--				<reportSets>-->
+<!--					<reportSet>-->
+<!--						<id>default</id>-->
+<!--						<reports>-->
+<!--							<report>javadoc</report>-->
+<!--							<report>test-javadoc</report>-->
+<!--						</reports>-->
+<!--					</reportSet>-->
+<!--					<reportSet>-->
+<!--						<id>aggregate</id>-->
+<!--						<reports>-->
+<!--							<report>aggregate</report>-->
+<!--							<report>test-aggregate</report>-->
+<!--						</reports>-->
+<!--					</reportSet>-->
+<!--				</reportSets>-->
+<!--			</plugin>-->
+			<!--            <plugin>-->
+			<!--                <groupId>org.apache.maven.plugins</groupId>-->
+			<!--                <artifactId>maven-changes-plugin</artifactId>-->
+			<!--&lt;!&ndash;                <version>${maven-changes.version}</version>&ndash;&gt;-->
+			<!--                <reportSets>-->
+			<!--                    <reportSet>-->
+			<!--                        <reports>-->
+			<!--                            <report>changes-report</report>-->
+			<!--                        </reports>-->
+			<!--                    </reportSet>-->
+			<!--                </reportSets>-->
+			<!--            </plugin>-->
+		</plugins>
+	</reporting>
+
+</project>

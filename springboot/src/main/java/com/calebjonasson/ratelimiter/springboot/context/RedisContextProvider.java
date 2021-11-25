@@ -2,7 +2,6 @@ package com.calebjonasson.ratelimiter.springboot.context;
 
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 
 import java.time.Duration;
@@ -10,11 +9,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-@Log4j2
+/**
+ * The redis context provider will provide a context as a rate limiting structure.
+ *
+ * This is used to group like things together and load configurations from.
+ *
+ * eg: rest-api-ratelimiter context will have rules attached to it:
+ * tll
+ * limit
+ * ... To be expanded on.
+ *
+ *
+ */
 public class RedisContextProvider implements ContextProvider {
+
+	/**
+	 * The redis template in which operations will be performed against.
+	 */
 	private final ReactiveStringRedisTemplate redisTemplate;
+
+	/**
+	 * The contexts that are being stored in memory.
+	 * TODO: remove this in favor of an actual redis context provider. This is just an in memory context provider..
+	 */
 	private Map<String, RateLimitContext> contexts = new HashMap<>();
 
+	/**
+	 * Constructor that takes a redis template.
+	 * @param redisTemplate The redist template
+	 */
 	public RedisContextProvider(final ReactiveStringRedisTemplate redisTemplate) {
 		this.redisTemplate = redisTemplate;
 	}

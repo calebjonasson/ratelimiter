@@ -14,11 +14,15 @@ import org.springframework.scripting.support.ResourceScriptSource;
 
 import java.util.List;
 
-// Only perform these operations if we have a redis template.
-//@ConditionalOnBean(ReactiveStringRedisTemplate.class)
+/**
+ * This is the default configuration used for redis rate limiting.
+ */
 @Configuration
 public class RedisRateLimiterConfiguration {
 
+	/**
+	 * The reactive redis template used to store the state of the rate limiter.
+	 */
 	@Autowired protected ReactiveStringRedisTemplate redisTemplate;
 
 	@Bean

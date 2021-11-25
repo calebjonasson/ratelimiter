@@ -8,9 +8,11 @@ import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededExce
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitException;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Flux;
 
 import java.time.Instant;
@@ -21,16 +23,34 @@ import java.util.*;
  *
  * TODO: Implement the pruning operation although this isn't really needed because of the built in ttl.
  */
-@Log4j2
+//@Log4j2
 public class RedisRateLimiter extends RateLimiter {
 
+	private static final Logger log = LoggerFactory.getLogger(RedisRateLimiter.class);
 	private static final String REDIS_PROPERTY_TOKENS = "tokens";
 	private static final String REDIS_PROPERTY_TIMESTAMP = "timestamp";
 
+	/**
+	 * The context provider to get ratelimiter state from.
+	 */
 	protected final ContextProvider contextProvider;
+
+	/**
+	 * The redis template provided by spring.
+	 */
 	protected final ReactiveStringRedisTemplate redisTemplate;
+
+	/**
+	 * Used to perform lua operations against the redis template.
+	 */
 	protected final RedisScript redisScript;
 
+	/**
+	 * Create a new concrete redis rate limiter.
+	 * @param contextProvider The context we want to use for the rate limiter state configuration.
+	 * @param redisTemplate The redis template that is used to perform redis operations.
+	 * @param redisScript The redis lua script used to perform burstable rate limiting.
+	 */
 	public RedisRateLimiter(
 			final ContextProvider contextProvider,
 			final ReactiveStringRedisTemplate redisTemplate,
@@ -62,7 +82,7 @@ public class RedisRateLimiter extends RateLimiter {
 		String index = this.redisKeyPrefix(context.getContextKey(), stateKey) + "." + REDIS_PROPERTY_TOKENS;
 		String value = this.redisTemplate.opsForValue().get(index).block();
 
-		if(!Strings.isBlank(value)) {
+		if(!StringUtils.hasText(value)) {
 			RateLimitState result = RateLimitState.builder().count(Long.parseLong(value)).build();
 			return Optional.ofNullable(result);
 		}

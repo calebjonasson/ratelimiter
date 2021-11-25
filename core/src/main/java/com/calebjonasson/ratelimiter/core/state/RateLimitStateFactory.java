@@ -5,6 +5,10 @@ import com.calebjonasson.ratelimiter.core.model.RateLimitState;
 
 import java.util.Date;
 
+
+/**
+ * This is a utility class that contains factory methods to easily create a rate limit state context.
+ */
 public class RateLimitStateFactory {
 
 	/**

@@ -52,10 +52,10 @@ public class InMemoryRateLimiterTest {
 		});
 
 		RateLimitContext rateLimitContext = contextProvider.getContext(DEFAULT_CONTEXT_KEY)
-				.orElseThrow(() -> new IllegalStateException());
+				.orElseThrow(IllegalStateException::new);
 
 		RateLimitState rateLimitState = limiter.getRateLimitState(rateLimitContext, stateKey)
-				.orElseThrow(() -> new IllegalStateException());
+				.orElseThrow(IllegalStateException::new);
 
 		Assertions.assertEquals(5, rateLimitState.getCount());
 	}
@@ -110,9 +110,14 @@ public class InMemoryRateLimiterTest {
 		AtomicInteger successCount = new AtomicInteger();
 
 		// Once we have loaded the operations we will attempt to break the rate limiter.
-		operations.stream().parallel().map(x -> {
-			successCount.getAndIncrement();
-			return x;
+		operations.stream().parallel().peek(x -> {
+			try {
+				limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+				successCount.getAndIncrement();
+			} catch (RateLimitException e) {
+				// We are expecting to hit exceptions here so this is ok. We don't want to log the 9900 so; do nothing.
+			}
+
 		}).collect(Collectors.toList());
 
 		// Assert that we are only performing mutex operations.

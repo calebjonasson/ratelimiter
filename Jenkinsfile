@@ -44,8 +44,8 @@ pipeline {
                 // git 'https://github.com/calebjonasson/ratelimiter.git'
                 // git credentialsId: "$GIT_CREDENTIALS_ID", url: 'git@github.com:calebjonasson/ratelimiter.git'
 //                 sh 'git clone git@github.com:calebjonasson/ratelimiter.git'
-                git clone;
-                // checkout scm
+//                 git clone;
+                checkout scm
             }
         }
         stage ('Build') {

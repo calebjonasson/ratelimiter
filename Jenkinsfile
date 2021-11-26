@@ -10,8 +10,8 @@ pipeline {
         booleanParam(name: 'RUN_GENERATE_SITE_STAGE', defaultValue: false, description: 'Whether or not we want to generate the site.')
         booleanParam(name: 'RUN_INTEGRATION_STAGE', defaultValue: false, description: 'Whether we should run the integration tests or not.')
         booleanParam(name: 'RUN_DEPLOY_STAGE', defaultValue: false, description: 'Whether we should run the deploy stage or not.')
-        string(name: 'CODE_COVERAGE_MINIMUM', defaultValue: '30', description: 'The minimum code coverage from jacoco reports.')
-        string(name: 'CODE_COVERAGE_MAXIMUM', defaultValue: '80', description: 'The maximum code coverage from jacoco reports.')
+        string(name: 'CODE_COVERAGE_MINIMUM', defaultValue: '70', description: 'The minimum code coverage from jacoco reports.')
+        string(name: 'CODE_COVERAGE_MAXIMUM', defaultValue: '90', description: 'The maximum code coverage from jacoco reports.')
         string(name: 'GIT_CREDENTIALS_ID', defaultValue: 'calebjonasson-github-jenkins', description: 'The git credentials id stored in jenkins.')
 
     }
@@ -21,18 +21,12 @@ pipeline {
             steps {
                 echo 'PIPELINE STAGE: Setup'
 
-                echo 'deleting workingspace data'
+                echo 'deleting workspace data'
                 deleteDir()
                 sh 'ls -lah'
 
                 echo "setting up git using credentials $GIT_CREDENTIALS_ID"
                 git credentialsId: "$GIT_CREDENTIALS_ID", url: 'git@github.com:calebjonasson/ratelimiter.git', branch: 'master'
-                // sh 'ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts'
-                // sh 'ssh -vT git@github.com'
-                // withCredentials([sshUserPrivateKey(credentialsId: "$GIT_CREDENTIALS_ID", keyFileVariable: 'key')]) {
-                //     sh 'GIT_SSH_COMMAND="ssh -i $key"'
-                //     sh 'export GIT_SSH_COMMAND'
-                // }
             }
         }
         // No checkout stage ? That is not required for this case
@@ -41,10 +35,6 @@ pipeline {
         stage ('Checkout') {
             steps {
                 echo 'PIPELINE STAGE: Checkout'
-                // git 'https://github.com/calebjonasson/ratelimiter.git'
-                // git credentialsId: "$GIT_CREDENTIALS_ID", url: 'git@github.com:calebjonasson/ratelimiter.git'
-//                 sh 'git clone git@github.com:calebjonasson/ratelimiter.git'
-//                 git clone;
                 checkout scm
             }
         }
@@ -61,13 +51,7 @@ pipeline {
                 script {
                     def nextVersion = getNextSemanticVersion();
                     println "Next version:" + nextVersion.toString();
-                    println " Major:" + nextVersion.getMajor();
-                    println " Minor:" + nextVersion.getMinor();
-                    println " Patch:" + nextVersion.getPatch();
                     env.NEXT_VERSION = nextVersion.toString();
-                    // def newParamAction = new hudson.model.ParametersAction(new hudson.model.StringParameterValue("NEXT_VERSION", nextVersion.toString()));
-                    // currentBuild.addAction(newParamAction);
-
                 }
                 sh """
                 mvn -B org.codehaus.mojo:versions-maven-plugin:2.5:set -DprocessAllModules -DnewVersion=$NEXT_VERSION  $MAVEN_OPTIONS
@@ -154,26 +138,28 @@ pipeline {
             }
         }
 
-        stage('Git Tag') {
-            steps {
-                echo 'PIPELINE STAGE: Git Tag'
-                sh "git tag v$NEXT_VERSION"
-                sh "git push origin v$NEXT_VERSION"
-            }
-        }
-
-        stage('Deploy') {
-            when {
-                expression { RUN_DEPLOY_STAGE == true }
-            }
-            steps {
-                echo 'PIPELINE STAGE: Deploy'
-                // Finally deploy all your jars, containers,
-                // deliverables to their respective repositories
-                sh """
-                mvn -B deploy
-                """
-            }
-        }
+// These steps need to be completed. Tagging requires some investigation. Deploy will require either making the local nexus
+// public or pushing release artifacts up to maven central.
+//         stage('Git Tag') {
+//             steps {
+//                 echo 'PIPELINE STAGE: Git Tag'
+//                 sh "git tag v$NEXT_VERSION"
+//                 sh "git push origin v$NEXT_VERSION"
+//             }
+//         }
+//
+//         stage('Deploy') {
+//             when {
+//                 expression { RUN_DEPLOY_STAGE == true }
+//             }
+//             steps {
+//                 echo 'PIPELINE STAGE: Deploy'
+//                 // Finally deploy all your jars, containers,
+//                 // deliverables to their respective repositories
+//                 sh """
+//                 mvn -B deploy
+//                 """
+//             }
+//         }
     }
 }

@@ -12,21 +12,45 @@ pipeline {
         booleanParam(name: 'RUN_DEPLOY_STAGE', defaultValue: false, description: 'Whether we should run the deploy stage or not.')
         string(name: 'CODE_COVERAGE_MINIMUM', defaultValue: '30', description: 'The minimum code coverage from jacoco reports.')
         string(name: 'CODE_COVERAGE_MAXIMUM', defaultValue: '80', description: 'The maximum code coverage from jacoco reports.')
-        string(name: 'GIT_CREDENTIALS_ID', defaultValue: '', description: 'The git credentials id stored in jenkins.')
+        string(name: 'GIT_CREDENTIALS_ID', defaultValue: 'calebjonasson-github-jenkins', description: 'The git credentials id stored in jenkins.')
 
     }
     stages {
 
+        stage ('Setup') {
+            steps {
+                echo 'PIPELINE STAGE: Setup'
+
+                echo 'deleting workingspace data'
+                deleteDir()
+                sh 'ls -lah'
+
+                echo "setting up git using credentials $GIT_CREDENTIALS_ID"
+                git credentialsId: "$GIT_CREDENTIALS_ID", url: 'git@github.com:calebjonasson/ratelimiter.git', branch: 'master'
+                // sh 'ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts'
+                // sh 'ssh -vT git@github.com'
+                // withCredentials([sshUserPrivateKey(credentialsId: "$GIT_CREDENTIALS_ID", keyFileVariable: 'key')]) {
+                //     sh 'GIT_SSH_COMMAND="ssh -i $key"'
+                //     sh 'export GIT_SSH_COMMAND'
+                // }
+            }
+        }
         // No checkout stage ? That is not required for this case
         // because Jenkins will checkout whole repo that contains Jenkinsfile,
         // which is also the tip of the branch that we want to build
         stage ('Checkout') {
             steps {
-                git 'https://github.com/calebjonasson/ratelimiter.git'
+                echo 'PIPELINE STAGE: Checkout'
+                // git 'https://github.com/calebjonasson/ratelimiter.git'
+                // git credentialsId: "$GIT_CREDENTIALS_ID", url: 'git@github.com:calebjonasson/ratelimiter.git'
+                sh 'git clone git@github.com:calebjonasson/ratelimiter.git'
+                // git clone;
+                // checkout scm
             }
         }
         stage ('Build') {
             steps {
+                echo 'PIPELINE STAGE: Build'
                 // For debugging purposes, it is always useful to print info
                 // about build environment that is seen by shell during the build
                 sh 'env'
@@ -41,6 +65,9 @@ pipeline {
                     println " Minor:" + nextVersion.getMinor();
                     println " Patch:" + nextVersion.getPatch();
                     env.NEXT_VERSION = nextVersion.toString();
+                    // def newParamAction = new hudson.model.ParametersAction(new hudson.model.StringParameterValue("NEXT_VERSION", nextVersion.toString()));
+                    // currentBuild.addAction(newParamAction);
+
                 }
                 sh """
                 mvn -B org.codehaus.mojo:versions-maven-plugin:2.5:set -DprocessAllModules -DnewVersion=$NEXT_VERSION  $MAVEN_OPTIONS
@@ -55,6 +82,7 @@ pipeline {
             // We have seperate stage for tests so
             // they stand out in grouping and visualizations
             steps {
+                echo 'PIPELINE STAGE: Unit Tests'
                 sh """
                 mvn -B test $MAVEN_OPTIONS
                 """
@@ -73,6 +101,7 @@ pipeline {
                 expression { RUN_INTEGRATION_STAGE == true }
             }
             steps {
+                echo 'PIPELINE STAGE: Integration Tests'
                 sh """
                 mvn -B integration-test $MAVEN_OPTIONS
                 """
@@ -86,6 +115,7 @@ pipeline {
 
         stage("Code coverage") {
             steps {
+                echo 'PIPELINE STAGE: Code Coverage'
                 script{
                     jacocoPublisher(
                         execPattern: '**/target/**.exec',
@@ -102,10 +132,12 @@ pipeline {
 
 
         stage('Generate Site') {
+
             when {
                 expression { RUN_GENERATE_SITE_STAGE == true}
             }
             steps {
+                echo 'PIPELINE STAGE: Generate Site'
                 sh "mvn site:site -pl site"
             }
 
@@ -113,6 +145,7 @@ pipeline {
 
         stage('Generate Report') {
             steps {
+                echo 'PIPELINE STAGE: Generate Report'
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
                 junit '**/target/surefire-reports/TEST-*.xml'
@@ -123,16 +156,9 @@ pipeline {
 
         stage('Git Tag') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: "$GIT_CREDENTIALS_ID", keyFileVariable: 'key')]) {
-                    withCredentials([sshUserPrivateKey(credentialsId: "$GIT_CREDENTIALS_ID", keyFileVariable: 'key')]) {
-                        // Push the tag up to github
-                        sh "git tag v$NEXT_VERSION"
-                        sh 'GIT_SSH_COMMAND = "ssh -i $key"'
-                        sh "git push origin v$NEXT_VERSION"
-
-                    }
-                }
-
+                echo 'PIPELINE STAGE: Git Tag'
+                sh "git tag v$NEXT_VERSION"
+                sh "git push origin v$NEXT_VERSION"
             }
         }
 
@@ -141,6 +167,7 @@ pipeline {
                 expression { RUN_DEPLOY_STAGE == true }
             }
             steps {
+                echo 'PIPELINE STAGE: Deploy'
                 // Finally deploy all your jars, containers,
                 // deliverables to their respective repositories
                 sh """

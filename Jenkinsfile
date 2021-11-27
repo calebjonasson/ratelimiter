@@ -105,7 +105,7 @@ pipeline {
                         execPattern: '**/target/**.exec',
                         classPattern: '**/target/classes',
                         sourcePattern: '**/src',
-                        inclusionPattern: 'com/calebjonasson/**',
+//                         inclusionPattern: 'com/calebjonasson/**',
                         changeBuildStatus: true,
                         minimumInstructionCoverage: "$CODE_COVERAGE_MINIMUM",
                         maximumInstructionCoverage: "$CODE_COVERAGE_MAXIMUM"

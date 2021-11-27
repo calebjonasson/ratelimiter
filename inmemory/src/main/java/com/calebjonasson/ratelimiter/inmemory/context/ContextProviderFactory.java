@@ -1,4 +1,4 @@
-package com.calebjonasson.ratelimiter.core.context;
+package com.calebjonasson.ratelimiter.inmemory.context;
 
 /**
  * A static factory util class that will allow for the creation of an in memory context provider.

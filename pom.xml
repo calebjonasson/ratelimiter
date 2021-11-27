@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <maven-compile.version>3.8.1</maven-compile.version>
+        <maven-compiler.version>3.8.1</maven-compiler.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven-javadoc.version>3.3.1</maven-javadoc.version>
@@ -60,6 +60,8 @@
         <module>core</module>
         <module>springboot</module>
         <module>site</module>
+        <module>test</module>
+        <module>inmemory</module>
     </modules>
 
     <dependencyManagement>
@@ -90,7 +92,7 @@
             <dependency>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compile-plugin.version}</version>
+                <version>${maven-compiler.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -150,7 +152,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compile-plugin.version}</version>
+                    <version>${maven-compiler.version}</version>
                     <configuration>
                         <source>${maven.compiler.source}</source>
                         <target>${maven.compiler.target}</target>

@@ -1,10 +1,10 @@
-package com.calebjonasson.ratelimiter.core.limiter;
+package com.calebjonasson.ratelimiter.inmemory.limiter;
 
+import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 import com.calebjonasson.ratelimiter.core.model.RateLimitState;
 import com.calebjonasson.ratelimiter.core.state.RateLimitStateFactory;
-import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,8 @@ import java.util.Optional;
 
 /**
  * An in memory rate limiter.
+ *
+ * Call atomic() to perform a ratelimit operation.
  */
 public class InMemoryRateLimiter extends RateLimiter {
 
@@ -24,9 +26,8 @@ public class InMemoryRateLimiter extends RateLimiter {
 
 	/**
 	 * The concrete states that are being held in the rate limiter.
-	 * TODO: Swap this out to a linkedHashMap using an LRU data structure.
+	 * TODO: Swap this out to a linkedHashMap using an LRUCache data structure.
 	 */
-//	private Map<String, RateLimitState> states = new LinkedHashMap<>(40000, 5, true);
 	private Map<String, RateLimitState> states = new HashMap<>();
 
 	/**

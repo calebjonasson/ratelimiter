@@ -9,7 +9,30 @@ is very well talked about and implemented here: [Scaling your API with rate limi
 
 ## Implementing
 
-The implementation documentation can be found within the sub-projects. `./ratelimiter-core` and `./ratelimiter-springboot`
+The implementation documentation can be found within the sub-projects. `./core` and `./springboot`
 
 The Springboot rate limiter implementation contains a redis rate limiter and will require that you use `RedisTemplate` and
 `RedisScript` implementations.
+
+### Inmemory Ratelimiter Sample:
+
+```java
+class Application {
+
+	public static void main(String args[]) {
+		String contextKey = "user-auth:asdf634hj2g3hj5ghj23g5";
+		String stateKey = "api:get:/users";
+
+		InMemoryRateLimiter rl = InMemoryRateLimiter.of(ContextProviderFactory.inMemoryContextProvider());
+
+		rl.atomic(contextKey, stateKey);
+	}	
+}
+```
+
+## Future plans
+* Split out the spring implementation to be ratelimiter-spring and ratelimiter-spring-redis respectively.
+* Split out the rate limiting strategies eg: BurstableRateLimiterStrategy vs AtomicRateLimiterStrategy
+* Add a service implementation that will allow for turn key operations and resizing of the memory footprint.
+* Add testing harnesses to test many different rate limiter styles.
+* Add a jdbc context provider

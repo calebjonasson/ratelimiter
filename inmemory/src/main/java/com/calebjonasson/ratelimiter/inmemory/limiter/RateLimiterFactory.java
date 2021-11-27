@@ -1,4 +1,4 @@
-package com.calebjonasson.ratelimiter.core.limiter;
+package com.calebjonasson.ratelimiter.inmemory.limiter;
 
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
 

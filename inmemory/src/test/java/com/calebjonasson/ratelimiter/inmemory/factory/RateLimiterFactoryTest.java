@@ -1,4 +1,4 @@
-package com.calebjonasson.ratelimiter.factory;
+package com.calebjonasson.ratelimiter.inmemory.factory;
 
 
 import com.calebjonasson.ratelimiter.core.context.ContextProviderFactory;
@@ -7,7 +7,6 @@ import com.calebjonasson.ratelimiter.core.limiter.RateLimiter;
 import com.calebjonasson.ratelimiter.core.limiter.RateLimiterFactory;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

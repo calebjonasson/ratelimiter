@@ -1,4 +1,4 @@
-package com.calebjonasson.ratelimiter.core.inmemory;
+package com.calebjonasson.ratelimiter.inmemory.inmemory;
 
 import com.calebjonasson.ratelimiter.core.context.ContextProviderFactory;
 import com.calebjonasson.ratelimiter.core.context.InMemoryContextProvider;
@@ -72,7 +72,6 @@ public class InMemoryRateLimiterTest {
 		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
 		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
 		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
-
 
 		// Sleep for enough time to reset the interval.
 		Thread.sleep(3100);

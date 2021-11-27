@@ -2,6 +2,7 @@ package com.calebjonasson.ratelimiter.inmemory.limiter;
 
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
+import com.calebjonasson.ratelimiter.core.limiter.RateLimiter;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 import com.calebjonasson.ratelimiter.core.model.RateLimitState;
 import com.calebjonasson.ratelimiter.core.state.RateLimitStateFactory;

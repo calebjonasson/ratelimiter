@@ -1,10 +1,10 @@
 package com.calebjonasson.ratelimiter.inmemory.factory;
 
 
-import com.calebjonasson.ratelimiter.core.context.ContextProviderFactory;
-import com.calebjonasson.ratelimiter.core.context.InMemoryContextProvider;
+import com.calebjonasson.ratelimiter.inmemory.context.ContextProviderFactory;
+import com.calebjonasson.ratelimiter.inmemory.context.InMemoryContextProvider;
+import com.calebjonasson.ratelimiter.inmemory.limiter.RateLimiterFactory;
 import com.calebjonasson.ratelimiter.core.limiter.RateLimiter;
-import com.calebjonasson.ratelimiter.core.limiter.RateLimiterFactory;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 import org.junit.jupiter.api.Test;
 

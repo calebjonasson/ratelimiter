@@ -1,5 +1,6 @@
 package com.calebjonasson.ratelimiter.inmemory.context;
 
+import com.calebjonasson.ratelimiter.core.context.ContextProvider;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 
 import java.util.HashMap;

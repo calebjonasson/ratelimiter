@@ -1,9 +1,9 @@
 package com.calebjonasson.ratelimiter.inmemory.inmemory;
 
-import com.calebjonasson.ratelimiter.core.context.ContextProviderFactory;
-import com.calebjonasson.ratelimiter.core.context.InMemoryContextProvider;
-import com.calebjonasson.ratelimiter.core.limiter.InMemoryRateLimiter;
-import com.calebjonasson.ratelimiter.core.limiter.RateLimiterFactory;
+import com.calebjonasson.ratelimiter.inmemory.context.ContextProviderFactory;
+import com.calebjonasson.ratelimiter.inmemory.context.InMemoryContextProvider;
+import com.calebjonasson.ratelimiter.inmemory.limiter.InMemoryRateLimiter;
+import com.calebjonasson.ratelimiter.inmemory.limiter.RateLimiterFactory;
 import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
 import com.calebjonasson.ratelimiter.core.model.RateLimitState;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;

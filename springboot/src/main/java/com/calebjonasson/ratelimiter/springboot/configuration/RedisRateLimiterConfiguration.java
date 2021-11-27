@@ -25,6 +25,11 @@ public class RedisRateLimiterConfiguration {
 	 */
 	@Autowired protected ReactiveStringRedisTemplate redisTemplate;
 
+
+	/**
+	 * Configuration for a RedisScript
+	 * @return a new instance of {@link RedisScript}
+	 */
 	@Bean
 	@SuppressWarnings("unchecked")
 	public RedisScript redisRequestRateLimiterScript() {
@@ -34,12 +39,20 @@ public class RedisRateLimiterConfiguration {
 		return redisScript;
 	}
 
+	/**
+	 * Create a default redis context provider from a redis template.
+	 * @return A new instance of the {@link ContextProvider}
+	 */
 	@Bean
 	public ContextProvider redisContextProvider() {
 		RedisContextProvider contextProvider = new RedisContextProvider(this.redisTemplate);
 		return contextProvider;
 	}
 
+	/**
+	 * Default {@link RedisRateLimiter}
+	 * @return A new RedisRateLimiter
+	 */
 	@Bean
 	public RedisRateLimiter redisRateLimiter() {
 		RedisRateLimiter rateLimiter = new RedisRateLimiter(

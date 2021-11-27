@@ -57,7 +57,7 @@ pipeline {
                 mvn -B org.codehaus.mojo:versions-maven-plugin:2.5:set -DprocessAllModules -DnewVersion=$NEXT_VERSION  $MAVEN_OPTIONS
                 """
                 sh """
-                mvn -B clean package $MAVEN_OPTIONS
+                mvn -B clean compile $MAVEN_OPTIONS
                 """
             }
         }
@@ -132,7 +132,7 @@ pipeline {
                 echo 'PIPELINE STAGE: Generate Report'
                 // If Maven was able to run the tests, even if some of the test
                 // failed, record the test results and archive the jar file.
-                junit '**/target/surefire-reports/TEST-*.xml'
+                //junit '**/target/surefire-reports/TEST-*.xml'
                 archiveArtifacts '**/target/*.jar'
 
             }

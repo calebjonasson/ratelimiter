@@ -30,7 +30,7 @@ public class InMemoryRateLimiterTest {
 		final String stateKey = "test-1";
 
 		for(int x = 0; x < 2; x++) {
-			limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+			limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class InMemoryRateLimiterTest {
 		// May need a way of creating a context.
 		Assertions.assertThrows(RateLimitExceededException.class, () -> {
 			for(int x = 0; x < 7; x++) {
-				limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+				limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
 				Thread.sleep(100);
 			}
 		});
@@ -69,18 +69,18 @@ public class InMemoryRateLimiterTest {
 
 		final String stateKey = "test-1";
 
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
 
 		// Sleep for enough time to reset the interval.
 		Thread.sleep(3100);
 
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
-		limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
+		limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
 
-		Assertions.assertThrows(RateLimitExceededException.class, () -> limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey));
+		Assertions.assertThrows(RateLimitExceededException.class, () -> limiter.handle(DEFAULT_CONTEXT_KEY, stateKey));
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class InMemoryRateLimiterTest {
 		// Once we have loaded the operations we will attempt to break the rate limiter.
 		operations.stream().parallel().peek(x -> {
 			try {
-				limiter.atomic(DEFAULT_CONTEXT_KEY, stateKey);
+				limiter.handle(DEFAULT_CONTEXT_KEY, stateKey);
 				successCount.getAndIncrement();
 			} catch (RateLimitException e) {
 				// We are expecting to hit exceptions here so this is ok. We don't want to log the 9900 so; do nothing.

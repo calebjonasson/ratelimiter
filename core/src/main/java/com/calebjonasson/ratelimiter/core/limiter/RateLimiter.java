@@ -18,13 +18,13 @@ import java.util.Optional;
 public abstract class RateLimiter {
 
 	/**
-	 * increment the rate limit atomic count.
+	 * Perform the rate limiting operation.
 	 * @param contextKey The context that we are access the rate via.
 	 * @param stateKey The key of the state we are looking to load.
 	 * @throws RateLimitException thrown if the state.limit is exceeded.
 	 * @return The rate limit state that was retrieved or newly created from this operation.
 	 */
-	public synchronized RateLimitState atomic(String contextKey, String stateKey) throws RateLimitException {
+	public synchronized RateLimitState handle(String contextKey, String stateKey) throws RateLimitException {
 
 		// Load the Current context/
 		RateLimitContext context = this.getRateLimitContextDataAccess()

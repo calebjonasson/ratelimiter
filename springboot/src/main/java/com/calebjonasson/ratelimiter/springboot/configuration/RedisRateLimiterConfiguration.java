@@ -1,12 +1,20 @@
 package com.calebjonasson.ratelimiter.springboot.configuration;
 
+import com.calebjonasson.ratelimiter.core.context.BurstableRateLimitContext;
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
+import com.calebjonasson.ratelimiter.core.context.configuration.BurstableContextConfiguration;
+import com.calebjonasson.ratelimiter.core.context.configuration.ContextConfigurations;
+import com.calebjonasson.ratelimiter.core.model.context.RateLimitContext;
+import com.calebjonasson.ratelimiter.springboot.context.BurstableRedisContextProvider;
 import com.calebjonasson.ratelimiter.springboot.context.RedisContextProvider;
-import com.calebjonasson.ratelimiter.springboot.limiter.RedisRateLimiter;
+import com.calebjonasson.ratelimiter.springboot.limiter.BurstableRedisRateLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
@@ -23,8 +31,20 @@ public class RedisRateLimiterConfiguration {
 	/**
 	 * The reactive redis template used to store the state of the rate limiter.
 	 */
-	@Autowired protected ReactiveStringRedisTemplate redisTemplate;
+	@Autowired
+	protected ReactiveStringRedisTemplate reactiveStringRedisTemplate;
 
+	/**
+	 * A redis template for context storage.
+	 */
+	@Autowired
+	protected ReactiveRedisTemplate reactiveRedisTemplate;
+
+
+//	@Bean
+//	public ReactiveRedisTemplate<String, BurstableRateLimitContext> rateLimitContextReactiveRedisTemplate() {
+//		return new
+//	}
 
 	/**
 	 * Configuration for a RedisScript
@@ -39,25 +59,37 @@ public class RedisRateLimiterConfiguration {
 		return redisScript;
 	}
 
+	public BurstableContextConfiguration contextConfiguration() {
+		return ContextConfigurations.burstableConfiguration(10, 20);
+	}
+
 	/**
 	 * Create a default redis context provider from a redis template.
 	 * @return A new instance of the {@link ContextProvider}
 	 */
 	@Bean
 	public ContextProvider redisContextProvider() {
-		RedisContextProvider contextProvider = new RedisContextProvider(this.redisTemplate);
+		BurstableRedisContextProvider contextProvider = new BurstableRedisContextProvider(this.reactiveRedisTemplate, this.contextConfiguration()) {
+			@Override
+			protected BurstableRateLimitContext createContext(String contextKey) {
+				return BurstableRateLimitContext.builder()
+						.burstCapacity(this.getContextConfiguration().getBurstCapacity())
+						.replenishRate(this.getContextConfiguration().getReplenishRate())
+						.build();
+			}
+		};
 		return contextProvider;
 	}
 
 	/**
-	 * Default {@link RedisRateLimiter}
+	 * Default {@link BurstableRedisRateLimiter}
 	 * @return A new RedisRateLimiter
 	 */
 	@Bean
-	public RedisRateLimiter redisRateLimiter() {
-		RedisRateLimiter rateLimiter = new RedisRateLimiter(
+	public BurstableRedisRateLimiter redisRateLimiter() {
+		BurstableRedisRateLimiter rateLimiter = new BurstableRedisRateLimiter(
 				this.redisContextProvider(),
-				this.redisTemplate,
+				this.reactiveStringRedisTemplate,
 				this.redisRequestRateLimiterScript());
 		return rateLimiter;
 	}

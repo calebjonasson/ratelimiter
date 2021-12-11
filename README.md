@@ -26,7 +26,7 @@ class Application {
 		InMemoryRateLimiter rl = InMemoryRateLimiter.of(ContextProviderFactory.inMemoryContextProvider());
 
 		rl.handle(contextKey, stateKey);
-	}	
+	}
 }
 ```
 

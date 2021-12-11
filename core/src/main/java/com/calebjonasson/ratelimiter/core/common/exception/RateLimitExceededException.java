@@ -1,7 +1,7 @@
 package com.calebjonasson.ratelimiter.core.common.exception;
 
-import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
-import com.calebjonasson.ratelimiter.core.model.RateLimitState;
+import com.calebjonasson.ratelimiter.core.model.context.AbstractRateLimitContext;
+import com.calebjonasson.ratelimiter.core.model.state.RateLimitState;
 import lombok.Data;
 
 /**
@@ -23,7 +23,7 @@ public class RateLimitExceededException extends RateLimitException {
 	/**
 	 * The context is stored with the Exception to allow for access by implementing code.
 	 */
-	protected RateLimitContext context;
+	protected AbstractRateLimitContext context;
 
 	/**
 	 * The state is stored with the exception to allow for access by implementing code.
@@ -69,7 +69,7 @@ public class RateLimitExceededException extends RateLimitException {
 	 * @param context The context we are looking to store with the exception.
 	 * @param state The state we are looking to store with the exception.
 	 */
-	public RateLimitExceededException(RateLimitContext context, RateLimitState state) {
+	public RateLimitExceededException(AbstractRateLimitContext context, RateLimitState state) {
 		this();
 		this.state = state;
 		this.context = context;
@@ -81,7 +81,7 @@ public class RateLimitExceededException extends RateLimitException {
 	 * @param state The state we are looking to store with the exception.
 	 * @param message A custom message
 	 */
-	public RateLimitExceededException(RateLimitContext context, RateLimitState state, String message) {
+	public RateLimitExceededException(AbstractRateLimitContext context, RateLimitState state, String message) {
 		this(message);
 		this.state = state;
 		this.context = context;
@@ -91,7 +91,7 @@ public class RateLimitExceededException extends RateLimitException {
 	 * Constructor will set the context as an available parameter.
 	 * @param context The context to save with the exception
 	 */
-	public RateLimitExceededException(RateLimitContext context) {
+	public RateLimitExceededException(AbstractRateLimitContext context) {
 		this();
 		this.context = context;
 	}
@@ -101,7 +101,7 @@ public class RateLimitExceededException extends RateLimitException {
 	 * @param context The context to be saved with the exception
 	 * @param message A custom message to be set.
 	 */
-	public RateLimitExceededException(RateLimitContext context, String message) {
+	public RateLimitExceededException(AbstractRateLimitContext context, String message) {
 		this(message);
 		this.context = context;
 	}

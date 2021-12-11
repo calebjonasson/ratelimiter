@@ -10,13 +10,6 @@ local requested = tonumber(ARGV[4])
 local fill_time = capacity/rate
 local ttl = math.floor(fill_time*2)
 
---redis.log(redis.LOG_WARNING, "rate " .. ARGV[1])
---redis.log(redis.LOG_WARNING, "capacity " .. ARGV[2])
---redis.log(redis.LOG_WARNING, "now " .. ARGV[3])
---redis.log(redis.LOG_WARNING, "requested " .. ARGV[4])
---redis.log(redis.LOG_WARNING, "filltime " .. fill_time)
---redis.log(redis.LOG_WARNING, "ttl " .. ttl)
-
 -- Get the current amount of token. if nil then set to capacity (ARG 2)
 local last_tokens = tonumber(redis.call("get", tokens_key))
 if last_tokens == nil then
@@ -42,9 +35,6 @@ if allowed then
 end
 
 --redis.log(redis.LOG_WARNING, "delta " .. delta)
---redis.log(redis.LOG_WARNING, "filled_tokens " .. filled_tokens)
---redis.log(redis.LOG_WARNING, "allowed_num " .. allowed_num)
---redis.log(redis.LOG_WARNING, "new_tokens " .. new_tokens)
 
 if ttl > 0 then
   redis.call("setex", tokens_key, ttl, new_tokens)

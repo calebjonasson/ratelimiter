@@ -3,21 +3,25 @@ package com.calebjonasson.ratelimiter.springboot;
 
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
 import com.calebjonasson.ratelimiter.springboot.configuration.EnableRedisRateLimiter;
-import com.calebjonasson.ratelimiter.springboot.limiter.RedisRateLimiter;
+import com.calebjonasson.ratelimiter.springboot.limiter.BurstableRedisRateLimiter;
 import com.calebjonasson.ratelimiter.springboot.shared.RatelimiterSampleSpringApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
 @PropertySource("application.yml")
+@Import(RedisReactiveAutoConfiguration.class)
 @EnableRedisRateLimiter
 @SpringBootTest(classes = RatelimiterSampleSpringApplication.class)
 public class SpringbootRatelimiterRedisConfigurationAutoloaderTest {
 
 	@Autowired
-	protected RedisRateLimiter redisRateLimiter;
+	protected BurstableRedisRateLimiter redisRateLimiter;
 
 	@Autowired
 	protected ContextProvider redisContextProvider;

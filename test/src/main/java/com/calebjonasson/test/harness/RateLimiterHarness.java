@@ -1,6 +1,6 @@
 package com.calebjonasson.test.harness;
 
-import com.calebjonasson.ratelimiter.core.limiter.RateLimiter;
+import com.calebjonasson.ratelimiter.core.limiter.AbstractRateLimiter;
 import com.calebjonasson.test.config.RateLimiterHarnessConfiguration;
 
 /**
@@ -17,7 +17,7 @@ public class RateLimiterHarness {
 	/**
 	 * The rate limiter we are looking to test with this harness.
 	 */
-	private final RateLimiter rateLimiter;
+	private final AbstractRateLimiter rateLimiter;
 
 	/**
 	 * private constructor to create a ratelimiter harness.
@@ -27,7 +27,7 @@ public class RateLimiterHarness {
 	 * @param configuration The configuration we will use to work with the rate limiter.
 	 * @param rateLimiter The rate limiter to be tested by this harness.
 	 */
-	private RateLimiterHarness(final RateLimiterHarnessConfiguration configuration, final RateLimiter rateLimiter) {
+	private RateLimiterHarness(final RateLimiterHarnessConfiguration configuration, final AbstractRateLimiter rateLimiter) {
 		this.configuration = configuration;
 		this.rateLimiter = rateLimiter;
 	}
@@ -38,7 +38,7 @@ public class RateLimiterHarness {
 	 * @param rateLimiter The rate limiter to be tested by this harness.
 	 * @return The harness that will work with the tests.
 	 */
-	public static RateLimiterHarness of(RateLimiterHarnessConfiguration configuration, RateLimiter rateLimiter) {
+	public static RateLimiterHarness of(RateLimiterHarnessConfiguration configuration, AbstractRateLimiter rateLimiter) {
 		return new RateLimiterHarness(configuration, rateLimiter);
 	}
 }

@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.calebjonasson</groupId>
-	<artifactId>site</artifactId>
+	<artifactId>ratelimiter-site</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Site</name>
@@ -24,14 +24,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.calebjonasson.ratelimiter</groupId>
-			<artifactId>core</artifactId>
+			<artifactId>ratelimiter-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<classifier>javadoc</classifier>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.calebjonasson.ratelimiter</groupId>
-			<artifactId>springboot</artifactId>
+			<artifactId>ratelimiter-inmemory</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>

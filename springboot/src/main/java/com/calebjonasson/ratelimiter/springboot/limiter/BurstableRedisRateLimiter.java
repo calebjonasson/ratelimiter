@@ -1,13 +1,16 @@
 package com.calebjonasson.ratelimiter.springboot.limiter;
 
+import com.calebjonasson.ratelimiter.core.context.BurstableRateLimitContext;
 import com.calebjonasson.ratelimiter.core.context.ContextProvider;
-import com.calebjonasson.ratelimiter.core.limiter.RateLimiter;
-import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
-import com.calebjonasson.ratelimiter.core.model.RateLimitState;
+import com.calebjonasson.ratelimiter.core.limiter.AbstractRateLimiter;
+import com.calebjonasson.ratelimiter.core.model.context.AbstractRateLimitContext;
+import com.calebjonasson.ratelimiter.core.model.state.RateLimitState;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitException;
 
-import lombok.extern.log4j.Log4j2;
+import com.calebjonasson.ratelimiter.core.response.RateLimitHandleResponse;
+import com.calebjonasson.ratelimiter.core.state.BurstableRateLimitState;
+import com.calebjonasson.ratelimiter.core.type.strategy.BurstableRateLimiterTypeStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
@@ -23,17 +26,13 @@ import java.util.*;
  *
  * TODO: Implement the pruning operation although this isn't really needed because of the built in ttl.
  */
-//@Log4j2
-public class RedisRateLimiter extends RateLimiter {
+public class BurstableRedisRateLimiter<
+		CONTEXT extends BurstableRateLimitContext>
+		extends AbstractRateLimiter<BurstableRateLimiterTypeStrategy, CONTEXT, BurstableRateLimitState> {
 
-	private static final Logger log = LoggerFactory.getLogger(RedisRateLimiter.class);
+	private static final Logger log = LoggerFactory.getLogger(BurstableRedisRateLimiter.class);
 	private static final String REDIS_PROPERTY_TOKENS = "tokens";
 	private static final String REDIS_PROPERTY_TIMESTAMP = "timestamp";
-
-	/**
-	 * The context provider to get ratelimiter state from.
-	 */
-	protected final ContextProvider contextProvider;
 
 	/**
 	 * The redis template provided by spring.
@@ -51,11 +50,11 @@ public class RedisRateLimiter extends RateLimiter {
 	 * @param redisTemplate The redis template that is used to perform redis operations.
 	 * @param redisScript The redis lua script used to perform burstable rate limiting.
 	 */
-	public RedisRateLimiter(
+	public BurstableRedisRateLimiter(
 			final ContextProvider contextProvider,
 			final ReactiveStringRedisTemplate redisTemplate,
 			final RedisScript redisScript) {
-		this.contextProvider = contextProvider;
+		super(contextProvider);
 		this.redisTemplate = redisTemplate;
 		this.redisScript = redisScript;
 	}
@@ -70,27 +69,22 @@ public class RedisRateLimiter extends RateLimiter {
 		return contextKey+".{" + stateKey + "}";
 	}
 
-
 	@Override
-	protected ContextProvider getRateLimitContextDataAccess() {
-		return this.contextProvider;
-	}
-
-	@Override
-	public Optional<RateLimitState> getRateLimitState(RateLimitContext context, String stateKey) {
+	public Optional<BurstableRateLimitState> getRateLimitState(AbstractRateLimitContext context, String stateKey) {
 
 		String index = this.redisKeyPrefix(context.getContextKey(), stateKey) + "." + REDIS_PROPERTY_TOKENS;
 		String value = this.redisTemplate.opsForValue().get(index).block();
 
 		if(!StringUtils.hasText(value)) {
-			RateLimitState result = RateLimitState.builder().count(Long.parseLong(value)).build();
+			BurstableRateLimitState result = BurstableRateLimitState.builder().tokens(Long.parseLong(value)).build();
 			return Optional.ofNullable(result);
 		}
 		return Optional.empty();
 	}
 
 	@Override
-	protected RateLimitState internalAtomicIncrement(RateLimitContext context, String stateKey, RateLimitState state) throws RateLimitException {
+	protected RateLimitHandleResponse internalIncrement(CONTEXT context, String stateKey, BurstableRateLimitState state)
+			throws RateLimitException {
 
 		// Make a unique key per user.
 		String prefix = this.redisKeyPrefix(context.getContextKey(), stateKey);
@@ -102,8 +96,8 @@ public class RedisRateLimiter extends RateLimiter {
 		List tokens = Arrays.asList(tokenKey, timestampKey);
 
 		try {
-			int replenishRate = 1;
-			int burstCapacity = (int)context.getLimit();
+			int replenishRate = (int)context.getReplenishRate();
+			int burstCapacity = (int)context.getBurstCapacity();
 			int requestedTokens = 1;
 			// The arguments to the LUA script. time() returns unixtime in seconds.
 			List<String> scriptArgs = Arrays.asList(replenishRate + "", burstCapacity + "",
@@ -126,7 +120,7 @@ public class RedisRateLimiter extends RateLimiter {
 
 			if(redisResult.get(0) != 1L) throw new RateLimitExceededException();
 
-			return RateLimitState.builder().count(redisResult.get(1)).build();
+			return RateLimitHandleResponse.of(BurstableRateLimitState.builder().tokens(redisResult.get(1)).build().refresh());
 		}
 		catch (Exception e) {
 			/*
@@ -136,6 +130,18 @@ public class RedisRateLimiter extends RateLimiter {
 			 */
 			throw new RateLimitException("An error occurred during rate limiting.", e);
 		}
+	}
+
+	@Override
+	protected boolean isValid(Optional<BurstableRateLimitState> burstableRateLimitState) {
+		return Objects.nonNull(burstableRateLimitState) && burstableRateLimitState.isPresent();
+	}
+
+	@Override
+	protected BurstableRateLimitState createRateLimitState(CONTEXT context) {
+
+		BurstableRateLimitState state = BurstableRateLimitState.builder().build();
+		return state;
 	}
 
 	@Override

@@ -28,3 +28,21 @@ and cached in redis to make the operations quick.
 
 * **RateLimitState** - the structure to be stored in redis.
 * **RateLimit** - the rules for the structure storage.
+
+
+# Patterns
+
+
+```
+interface: RateLimiter
+- ContextProvider: allows the storage and access of contexts.
+- StateProvider: allows the storage and access of states.
+
+
+interface: RateLimiterType Atomic/Burstable
+
+interface: RateLimiterTypeStrategy
+- 
+
+ 
+```

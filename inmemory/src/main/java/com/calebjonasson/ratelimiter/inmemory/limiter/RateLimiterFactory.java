@@ -9,13 +9,10 @@ public class RateLimiterFactory {
 
 	/**
 	 * Factory method to create a new in memory rate limiter
-	 * @param contextDataAccess The context data access that needs to be injected into the rate limiter.
-	 * @return A new {@link InMemoryRateLimiter}
+	 * @param contextProvider The context data access that needs to be injected into the rate limiter.
+	 * @return A new {@link AtomicInMemoryRateLimiter}
 	 */
-	public static InMemoryRateLimiter inMemoryRateLimiter(ContextProvider contextDataAccess) {
-		return new InMemoryRateLimiter(contextDataAccess);
+	public static AtomicInMemoryRateLimiter inMemoryRateLimiter(ContextProvider contextProvider) {
+		return new AtomicInMemoryRateLimiter(contextProvider);
 	}
-
-
-
 }

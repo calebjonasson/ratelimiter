@@ -1,10 +1,11 @@
 package com.calebjonasson.ratelimiter.springboot.context;
 
-import com.calebjonasson.ratelimiter.core.context.ContextProvider;
-import com.calebjonasson.ratelimiter.core.model.RateLimitContext;
-import org.springframework.data.redis.core.ReactiveStringRedisTemplate;
+import com.calebjonasson.ratelimiter.core.context.AbstractContextProvider;
+import com.calebjonasson.ratelimiter.core.context.configuration.AbstractContextConfiguration;
+import com.calebjonasson.ratelimiter.core.model.context.AbstractRateLimitContext;
+import com.calebjonasson.ratelimiter.core.type.strategy.RateLimiterTypeStrategy;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,36 +22,36 @@ import java.util.Optional;
  *
  *
  */
-public class RedisContextProvider implements ContextProvider {
+public abstract class RedisContextProvider<
+		TYPE extends RateLimiterTypeStrategy,
+		CONTEXT extends AbstractRateLimitContext<TYPE>,
+		CONFIGURATION extends AbstractContextConfiguration<TYPE>>
+		extends AbstractContextProvider<TYPE, CONTEXT, CONFIGURATION> {
 
 	/**
 	 * The redis template in which operations will be performed against.
 	 */
-	private final ReactiveStringRedisTemplate redisTemplate;
+	private final ReactiveRedisTemplate<String, CONTEXT> redisTemplate;
 
 	/**
 	 * The contexts that are being stored in memory.
 	 * TODO: remove this in favor of an actual redis context provider. This is just an in memory context provider..
 	 */
-	private Map<String, RateLimitContext> contexts = new HashMap<>();
+	private Map<String, CONTEXT> contexts = new HashMap<>();
 
 	/**
 	 * Constructor that takes a redis template.
-	 * @param redisTemplate The redist template
+	 * @param redisTemplate The redis template
+	 * @param configuration The configuration that is used to create contexts.
 	 */
-	public RedisContextProvider(final ReactiveStringRedisTemplate redisTemplate) {
+	public RedisContextProvider(final ReactiveRedisTemplate<String, CONTEXT> redisTemplate, CONFIGURATION configuration) {
+		super(configuration);
 		this.redisTemplate = redisTemplate;
 	}
 
 	@Override
-	public Optional<RateLimitContext> getContext(String contextKey) {
-		if (this.contexts.containsKey(contextKey)) {
-			return Optional.of(this.contexts.get(contextKey));
-		} else {
-
-			RateLimitContext context = RateLimitContext.builder().contextKey(contextKey).limit(10).interval(Duration.ofSeconds(5).toMillis()).build();
-			return Optional.of(this.putContext(contextKey, context));
-		}
+	protected Optional<CONTEXT> getContextInternal(String contextKey) {
+		return Optional.of(redisTemplate.opsForValue().get(contextKey).block());
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class RedisContextProvider implements ContextProvider {
 	 * @param context The context that we are adding to the map.
 	 * @return The added context.
 	 */
-	public RateLimitContext putContext(String contextKey, RateLimitContext context) {
+	public AbstractRateLimitContext putContext(String contextKey, CONTEXT context) {
 		this.contexts.put(contextKey, context);
 		return context;
 	}

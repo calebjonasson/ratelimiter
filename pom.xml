@@ -58,7 +58,7 @@
 
     <modules>
         <module>core</module>
-        <module>springboot</module>
+<!--        <module>springboot</module>-->
         <module>site</module>
         <module>test</module>
         <module>inmemory</module>

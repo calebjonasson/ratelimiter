@@ -31,6 +31,7 @@ public abstract class AbstractRateLimiter<
 
 	/**
 	 * Store the ContextProvider in the {@link AbstractRateLimiter}
+	 * @param contextProvider The context we are looking to store in this ratelimiter.
 	 */
 	public AbstractRateLimiter(ContextProvider<TYPE, CONTEXT> contextProvider) {
 		this.contextProvider = contextProvider;
@@ -40,7 +41,7 @@ public abstract class AbstractRateLimiter<
 	 * The is the concrete implementation of the overridden handle method.
 	 * @param request The rate limit request we are looking to handle.
 	 * @return A {@link RateLimitHandleResponse} containing the state and available capacity.
-	 * @throws RateLimitException
+	 * @throws RateLimitException thrown if the rate limit is exceeded or another internal exception is thrown.
 	 */
 	public synchronized RateLimitHandleResponse handle(ContextStateRateLimitRequest request) throws RateLimitException {
 

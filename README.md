@@ -83,18 +83,18 @@ class Application {
 ```
 
 
-## Subprojects
+## modules
 
-### Core
+### ratelimiter-core
 The core module contains the interfaces used by the implementations. There are no concrete usages here.
 
-### InMemory
+### ratelimiter-inmemory
 The in memory project contains implementations for context storage as well as state storage.
 
-### Springboot
+### spring/ratelimiter-springboot-redis
 The springboot project contains implementations for springboot and redis with pre built configurations.
 
-### Test
+### ratelimiter-test
 This is a project that is purely used during the testing of rate limiters.
 
 

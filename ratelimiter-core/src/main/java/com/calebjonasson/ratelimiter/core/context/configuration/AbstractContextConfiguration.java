@@ -3,6 +3,10 @@ package com.calebjonasson.ratelimiter.core.context.configuration;
 import com.calebjonasson.ratelimiter.core.type.strategy.RateLimiterTypeStrategy;
 import lombok.Data;
 
+/**
+ * A context configuration that will allow for basic configuration of Contexts.
+ * @param <TYPE> The rate limiter type used to link together like implementations.
+ */
 @Data
 public abstract class AbstractContextConfiguration<
 		TYPE extends RateLimiterTypeStrategy> {

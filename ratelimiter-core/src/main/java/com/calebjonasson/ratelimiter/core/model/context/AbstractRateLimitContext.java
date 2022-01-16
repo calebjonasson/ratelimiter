@@ -27,5 +27,8 @@ public abstract class AbstractRateLimitContext<TYPE extends RateLimiterTypeStrat
 	 */
 	protected String contextKey;
 
+	/**
+	 * A flag for all contexts to support an enabled or disabled status.
+	 */
 	protected boolean enabled = true;
 }

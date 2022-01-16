@@ -22,6 +22,7 @@ public interface ContextProvider<
 	/**
 	 * Load the context from whatever the data store is.
 	 * @param contextKey The context key that we are loading from the datasource.
+	 * @param <T> The type of context that this provider will be able to handle.
 	 * @return An optional {@link AbstractRateLimitContext} if the implementation needs to create a context on the fly it should
 	 * do so here.
 	 * @throws RateLimitContextNotFoundException thrown if unable to find or create a context by the desired key.
@@ -32,6 +33,7 @@ public interface ContextProvider<
 
 	/**
 	 * Get the configuration class that has been stored within this context.
+	 * @param <T> The type of context configuration defined largely by the class TYPE.
 	 * @return The configuration class that extends {@link AbstractContextConfiguration}
 	 */
 	public abstract <T extends AbstractContextConfiguration<TYPE>> T getContextConfiguration();

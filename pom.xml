@@ -56,7 +56,7 @@
 
     <modules>
         <module>ratelimiter-core</module>
-<!--        <module>springboot</module>-->
+<!--        <module>spring/ratelimiter-springboot-redis</module>-->
         <module>ratelimiter-site</module>
         <module>ratelimiter-test</module>
         <module>ratelimiter-inmemory</module>

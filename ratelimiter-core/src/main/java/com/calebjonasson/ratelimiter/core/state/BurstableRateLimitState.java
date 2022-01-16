@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+/**
+ * A bustrable rate limit state that will use tokens and a last refreshed to know what it can burst up to.
+ */
 @Data
 @Builder
 public class BurstableRateLimitState implements RateLimitState<BurstableRateLimiterTypeStrategy> {
@@ -25,6 +28,7 @@ public class BurstableRateLimitState implements RateLimitState<BurstableRateLimi
 
 	/**
 	 * Update the states refresh timestamp with the current date.
+	 * @return The current {@link BurstableRateLimitState}
 	 */
 	public BurstableRateLimitState refresh() {
 		this.setLastRefreshed(new Date());

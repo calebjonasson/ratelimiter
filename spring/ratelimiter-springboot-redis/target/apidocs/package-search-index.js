@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.calebjonasson.ratelimiter.springboot.configuration"},{"l":"com.calebjonasson.ratelimiter.springboot.context"},{"l":"com.calebjonasson.ratelimiter.springboot.limiter"}];updateSearchResults();

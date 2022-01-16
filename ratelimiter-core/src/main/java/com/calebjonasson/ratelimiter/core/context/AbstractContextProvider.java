@@ -69,6 +69,8 @@ public abstract class AbstractContextProvider<
 
 	/**
 	 * The implementation of this method should simply instantiate a CONTEXT
+	 * @param contextKey The key for the created context.
+	 * @param <T> The type of context that this provider will be able to handle.
 	 * @return A new context to be associated with the request.
 	 */
 	protected abstract <T extends RateLimitContext<TYPE>> T createContext(String contextKey);

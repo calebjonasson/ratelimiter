@@ -1,5 +1,8 @@
 package com.calebjonasson.ratelimiter.core.common.model;
 
+/**
+ * This interface is used to require like implementations of the interval property so we can easily map values.
+ */
 public interface IntervalMemberContainer {
 
 	/**

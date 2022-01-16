@@ -5,6 +5,12 @@ import com.calebjonasson.ratelimiter.core.model.context.AbstractRateLimitContext
 import com.calebjonasson.ratelimiter.core.request.ContextStateRateLimitRequest;
 import com.calebjonasson.ratelimiter.core.type.strategy.RateLimiterTypeStrategy;
 
+/**
+ * A context based rate limiter will group like requests under a given context and allow for data to be loaded and used
+ * from within the provided context.
+ * @param <TYPE> The type of rate limiter used to group like implementations.
+ * @param <CONTEXT> The context that is required during implementation.
+ */
 public abstract class ContextBasedRateLimiter<
 			TYPE extends RateLimiterTypeStrategy,
 			CONTEXT extends AbstractRateLimitContext<TYPE>

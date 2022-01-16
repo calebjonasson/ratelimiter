@@ -1,5 +1,8 @@
 package com.calebjonasson.ratelimiter.core.common.model;
 
+/**
+ * A shared interface to describe and decorate a class with requirements of a limit member.
+ */
 public interface LimitMemberContainer {
 
 	/**

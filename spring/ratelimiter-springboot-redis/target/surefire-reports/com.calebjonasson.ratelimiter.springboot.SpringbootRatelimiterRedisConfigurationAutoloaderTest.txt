@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: com.calebjonasson.ratelimiter.springboot.SpringbootRatelimiterRedisConfigurationAutoloaderTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 2, Skipped: 0, Time elapsed: 1.369 s <<< FAILURE! - in com.calebjonasson.ratelimiter.springboot.SpringbootRatelimiterRedisConfigurationAutoloaderTest
+com.calebjonasson.ratelimiter.springboot.SpringbootRatelimiterRedisConfigurationAutoloaderTest.testApplicationContextContainsRedisRateLimiter  Time elapsed: 0.004 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'com.calebjonasson.ratelimiter.springboot.configuration.RedisRateLimiterConfiguration': Unsatisfied dependency expressed through field 'reactiveStringRedisTemplate'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.data.redis.core.ReactiveStringRedisTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.data.redis.core.ReactiveStringRedisTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+
+com.calebjonasson.ratelimiter.springboot.SpringbootRatelimiterRedisConfigurationAutoloaderTest.testApplicationContextContainsRedisRateContextProvider  Time elapsed: 0 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'com.calebjonasson.ratelimiter.springboot.configuration.RedisRateLimiterConfiguration': Unsatisfied dependency expressed through field 'reactiveStringRedisTemplate'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.data.redis.core.ReactiveStringRedisTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+Caused by: org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.springframework.data.redis.core.ReactiveStringRedisTemplate' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+

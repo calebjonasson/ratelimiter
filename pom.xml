@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ratelimiter</artifactId>
     <groupId>com.calebjonasson</groupId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <description>Ratelimiter is a project that contains multiple ways to create and handle rate limiting within a project.</description>
@@ -57,11 +55,11 @@
     </properties>
 
     <modules>
-        <module>core</module>
+        <module>ratelimiter-core</module>
 <!--        <module>springboot</module>-->
-        <module>site</module>
-        <module>test</module>
-        <module>inmemory</module>
+        <module>ratelimiter-site</module>
+        <module>ratelimiter-test</module>
+        <module>ratelimiter-inmemory</module>
     </modules>
 
     <dependencyManagement>

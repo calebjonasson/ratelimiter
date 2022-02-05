@@ -12,8 +12,6 @@ import com.calebjonasson.ratelimiter.core.type.strategy.RateLimiterTypeStrategy;
  * It should be viable to store the rate limit context in memory or in a database. If it is stored in a database it will
  * need to be highly cached in order to perform effectively.
  *
- *
- * @author Caleb Jonasson
  */
 public interface ContextProvider<
 		TYPE extends RateLimiterTypeStrategy,

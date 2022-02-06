@@ -122,7 +122,7 @@ pipeline {
             }
             steps {
                 echo 'PIPELINE STAGE: Generate Site'
-                sh "mvn site:site -pl site"
+                sh "mvn site:site -pl ratelimiter-site"
             }
 
         }

@@ -33,5 +33,4 @@ public class AtomicRateLimitState implements RateLimitState<AtomicRateLimiterTyp
 				", count=" + count +
 				'}';
 	}
-
 }

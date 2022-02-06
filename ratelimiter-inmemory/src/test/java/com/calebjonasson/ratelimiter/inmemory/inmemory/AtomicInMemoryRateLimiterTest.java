@@ -11,7 +11,6 @@ import com.calebjonasson.ratelimiter.inmemory.context.InMemoryContextProvider;
 import com.calebjonasson.ratelimiter.inmemory.limiter.AtomicInMemoryRateLimiter;
 import com.calebjonasson.ratelimiter.inmemory.limiter.InMemoryRateLimiter;
 import com.calebjonasson.ratelimiter.inmemory.limiter.RateLimiterFactory;
-import com.calebjonasson.ratelimiter.core.model.state.RateLimitState;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitExceededException;
 import com.calebjonasson.ratelimiter.core.common.exception.RateLimitException;
 import org.junit.jupiter.api.Assertions;

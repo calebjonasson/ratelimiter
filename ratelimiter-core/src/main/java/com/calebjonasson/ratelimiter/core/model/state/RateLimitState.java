@@ -7,6 +7,9 @@ import com.calebjonasson.ratelimiter.core.type.strategy.RateLimiterTypeStrategy;
  *
  * eg: burstable will have an internal fill rate while an in memory approach may not use an expiry within the state
  * data structure. instead it can be outside and interacted with via the service.
+ *
+ * @see com.calebjonasson.ratelimiter.core.state.BurstableRateLimitState
+ * @see com.calebjonasson.ratelimiter.core.state.AtomicRateLimitState
  */
 public interface RateLimitState<TYPE extends RateLimiterTypeStrategy> {
 

@@ -20,20 +20,20 @@ public class RateLimitHandleResponse {
 	protected Long remainingCapacity;
 
 	/**
-	 *
+	 * Create a new rate limit state handle response object.
 	 * @param state The state to be stored in this.
 	 */
 	public RateLimitHandleResponse(RateLimitState state) {
 		this.state = state;
+
 	}
 
 	/**
-	 *
-	 * @param state The state that is stored in memory, redis or aatabase.
+	 * @param state The state that is stored in memory, redis or database.
 	 * @param remainingCapacity The remaining request space.
 	 */
 	public RateLimitHandleResponse(RateLimitState state, Long remainingCapacity) {
-		this.state = state;
+		this(state);
 		this.remainingCapacity = remainingCapacity;
 	}
 
